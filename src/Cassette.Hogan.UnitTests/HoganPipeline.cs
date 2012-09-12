@@ -14,7 +14,7 @@ namespace Cassette.HtmlTemplates
         {
             var container = new TinyIoCContainer();
             container.Register<IUrlModifier>(new VirtualDirectoryPrepender("/"));
-            container.Register<IUrlGenerator>((c, n) => new UrlGenerator(c.Resolve<IUrlModifier>(), ""));
+            container.Register<IUrlGenerator>((c, n) => new UrlGenerator(new FakeFileSystem(), c.Resolve<IUrlModifier>(), ""));
             pipeline = container.Resolve<HoganPipeline>();
         }
 

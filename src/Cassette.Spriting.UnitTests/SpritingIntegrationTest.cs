@@ -85,12 +85,12 @@ namespace Cassette.Spriting
             return bundle;
         }
 
-        static TinyIoCContainer CreateContainer()
+        TinyIoCContainer CreateContainer()
         {
             var container = new TinyIoCContainer();
             new SpritingContainerConfiguration().Configure(container);
             container.Register(new CassetteSettings());
-            container.Register<IUrlGenerator>(new UrlGenerator(new VirtualDirectoryPrepender("/"), "cassette.axd/"));
+            container.Register<IUrlGenerator>((c,n) => new UrlGenerator(c.Resolve<CassetteSettings>().SourceDirectory, new VirtualDirectoryPrepender("/"), "cassette.axd/"));
             container.Register<IConfiguration<SpritingSettings>, DefaultSpritingSettingsConfiguration>();
             return container;
         }

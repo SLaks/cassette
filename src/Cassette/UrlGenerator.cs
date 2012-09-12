@@ -1,15 +1,18 @@
 using System;
+using Cassette.IO;
 using Cassette.Utilities;
 
 namespace Cassette
 {
     class UrlGenerator : IUrlGenerator
     {
+        readonly IDirectory sourceDirectory;
         readonly IUrlModifier urlModifier;
         readonly string cassetteHandlerPrefix;
 
-        public UrlGenerator(IUrlModifier urlModifier, string cassetteHandlerPrefix)
+        public UrlGenerator(IDirectory sourceDirectory, IUrlModifier urlModifier, string cassetteHandlerPrefix)
         {
+            this.sourceDirectory = sourceDirectory;
             this.urlModifier = urlModifier;
             this.cassetteHandlerPrefix = cassetteHandlerPrefix;
         }
@@ -31,6 +34,19 @@ namespace Cassette
             var url = cassetteHandlerPrefix + "asset" + assetPath + "?" + hash;
 
             return urlModifier.Modify(url);
+        }
+
+        public string CreateRawFileUrl(string filename)
+        {
+            return CreateRawFileUrl(filename, HashFileContents(filename));
+        }
+
+        string HashFileContents(string filename)
+        {
+            using (var stream = sourceDirectory.GetFile(filename).OpenRead())
+            {
+                return stream.ComputeSHA1Hash().ToHexString();
+            }
         }
 
         public string CreateRawFileUrl(string filename, string hash)

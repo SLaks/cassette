@@ -19,7 +19,7 @@ namespace Cassette.Views
             bundles = new BundleCollection(settings, Mock.Of<IFileSearchProvider>(), Mock.Of<IBundleFactoryProvider>());
             referenceBuilder = new Mock<IReferenceBuilder>();
             var urlModifier = new VirtualDirectoryPrepender("/");
-            var urlGenerator = new UrlGenerator(urlModifier, "cassette.axd/");
+            var urlGenerator = new UrlGenerator(new FakeFileSystem(), urlModifier, "cassette.axd/");
             helper = new BundlesHelper(bundles, settings, urlGenerator, () => referenceBuilder.Object, Mock.Of<IFileAccessAuthorization>(), Mock.Of<IBundleCacheRebuilder>(), new SimpleJsonSerializer());
         }
 

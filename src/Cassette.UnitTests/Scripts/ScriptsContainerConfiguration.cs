@@ -21,7 +21,9 @@ namespace Cassette.Scripts
             container = new TinyIoCContainer();
             container.Register<IJavaScriptMinifier, MicrosoftJavaScriptMinifier>();
             container.Register(typeof(IUrlModifier), Mock.Of<IUrlModifier>());
-            container.Register<IUrlGenerator>((c, x) => new UrlGenerator(c.Resolve<IUrlModifier>(), "cassette.axd/"));
+            container.Register<IUrlGenerator>(
+                (c, x) => new UrlGenerator(new FakeFileSystem(), c.Resolve<IUrlModifier>(), "cassette.axd/")
+            );
 
             configuration = new ScriptContainerConfiguration(type => new Type[0]);
             configuration.Configure(container);
