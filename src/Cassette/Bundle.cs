@@ -81,7 +81,7 @@ namespace Cassette
             }
         }
 
-        internal virtual IEnumerable<string> GetUrls(bool isDebuggingEnabled, IUrlGenerator urlGenerator)
+        public virtual IEnumerable<string> GetUrls(bool isDebuggingEnabled, IUrlGenerator urlGenerator)
         {
             if (isDebuggingEnabled)
             {
